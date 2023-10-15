@@ -40,11 +40,7 @@ public class BookServiceImplTest {
     @Rollback
     @Test
     void save_checkOnRollback() {
-        try {
-            bookService.save(testBookRequestDto);
-        } catch (DataProcessingException e) {
-            assertTrue(e.getMessage().contains("Can't insert book into DB: "));
-        }
+        bookService.save(testBookRequestDto);
 
         Assertions.assertThrows(DataProcessingException.class, () ->
                 bookService.findById(bookMapper
