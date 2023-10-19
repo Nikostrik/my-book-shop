@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import project.mybookshop.dto.BookDto;
+import project.mybookshop.dto.BookSearchParametersDto;
 import project.mybookshop.dto.CreateBookRequestDto;
 import project.mybookshop.service.BookService;
 
@@ -40,5 +41,10 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search(BookSearchParametersDto searchParametersDto) {
+        return bookService.search(searchParametersDto);
     }
 }

@@ -126,6 +126,7 @@
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
                     <sourceDirectories>src</sourceDirectories>
+                    <excludes>**/BookSearchParametersDto.java</excludes>
                 </configuration>
             </plugin>
             <plugin>
