@@ -18,11 +18,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private final Map<String, Object> body = new LinkedHashMap<>();
+
     @ExceptionHandler({EntityNotFoundException.class})
     protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND);
+        body.put("errors", ex.getMessage());
+        return new ResponseEntity<>(body, (HttpStatusCode) body.get("status"));
+    }
+
+    @ExceptionHandler({RegistrationException.class})
+    protected ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST);
         body.put("errors", ex.getMessage());
         return new ResponseEntity<>(body, (HttpStatusCode) body.get("status"));
     }
