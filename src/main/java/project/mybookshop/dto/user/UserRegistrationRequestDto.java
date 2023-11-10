@@ -6,7 +6,6 @@ import lombok.Data;
 import project.mybookshop.validation.Email;
 import project.mybookshop.validation.FieldMatch;
 
-
 @FieldMatch(field = "password",
         fieldMatch = "repeatPassword",
         message = "Password fields must match")
