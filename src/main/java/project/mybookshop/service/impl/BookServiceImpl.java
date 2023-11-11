@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import project.mybookshop.dto.BookDto;
-import project.mybookshop.dto.BookSearchParametersDto;
-import project.mybookshop.dto.CreateBookRequestDto;
+import project.mybookshop.dto.book.BookDto;
+import project.mybookshop.dto.book.BookSearchParametersDto;
+import project.mybookshop.dto.book.CreateBookRequestDto;
 import project.mybookshop.exceptions.EntityNotFoundException;
 import project.mybookshop.mapper.BookMapper;
 import project.mybookshop.model.Book;
@@ -41,6 +41,13 @@ public class BookServiceImpl implements BookService {
                 () -> new EntityNotFoundException("Can't find book by id: " + id)
         );
         return bookMapper.toDto(book);
+    }
+
+    @Override
+    public BookDto updateById(Long id, CreateBookRequestDto requestDto) {
+        Book book = bookMapper.toModel(requestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override

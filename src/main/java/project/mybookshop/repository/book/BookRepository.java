@@ -5,5 +5,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import project.mybookshop.model.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
-
 }
