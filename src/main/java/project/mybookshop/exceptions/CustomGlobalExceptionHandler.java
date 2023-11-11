@@ -18,21 +18,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String TIMESTAMP_KEY = "timestamp";
+    private static final String STATUS_KEY = "status";
+    private static final String ERRORS_KEY = "errors";
     private final Map<String, Object> body = new LinkedHashMap<>();
 
     @ExceptionHandler({EntityNotFoundException.class})
     protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND);
-        body.put("errors", ex.getMessage());
+        body.put(TIMESTAMP_KEY, LocalDateTime.now());
+        body.put(STATUS_KEY, HttpStatus.NOT_FOUND);
+        body.put(ERRORS_KEY, ex.getMessage());
         return new ResponseEntity<>(body, (HttpStatusCode) body.get("status"));
     }
 
     @ExceptionHandler({RegistrationException.class})
     protected ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("errors", ex.getMessage());
+        body.put(TIMESTAMP_KEY, LocalDateTime.now());
+        body.put(STATUS_KEY, HttpStatus.BAD_REQUEST);
+        body.put(ERRORS_KEY, ex.getMessage());
         return new ResponseEntity<>(body, (HttpStatusCode) body.get("status"));
     }
 
@@ -43,12 +46,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpStatusCode status,
             WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put(TIMESTAMP_KEY, LocalDateTime.now());
+        body.put(STATUS_KEY, HttpStatus.BAD_REQUEST);
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorMessage)
                 .toList();
-        body.put("errors", errors);
+        body.put(ERRORS_KEY, errors);
         return new ResponseEntity<>(body, headers, status);
     }
 
