@@ -3,7 +3,6 @@ package project.mybookshop.dto.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import project.mybookshop.validation.Email;
 import project.mybookshop.validation.FieldMatch;
 
 @FieldMatch(field = "password",
@@ -12,7 +11,6 @@ import project.mybookshop.validation.FieldMatch;
 @Data
 public class UserRegistrationRequestDto {
     @NotBlank
-    @Email
     @Size(min = 8, max = 50)
     private String email;
 
