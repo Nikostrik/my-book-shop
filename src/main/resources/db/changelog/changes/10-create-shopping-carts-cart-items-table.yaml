@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-shopping-carts-cart-items-table
+      author: nikita ostrenskyi
+      changes:
+        - createTable:
+            tableName: shopping_carts_cart_items
+            columns:
+              - column:
+                  name: shopping_cart_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_shopping_cart_id
+                    references: shopping_carts(id)
+              - column:
+                  name: cart_item_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_cart_item_id
+                    references: cart_items(id)
