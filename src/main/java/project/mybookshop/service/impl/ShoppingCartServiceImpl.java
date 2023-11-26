@@ -14,15 +14,15 @@ import project.mybookshop.model.ShoppingCart;
 import project.mybookshop.model.User;
 import project.mybookshop.repository.cartitem.CartItemRepository;
 import project.mybookshop.repository.shoppingcart.ShoppingCartRepository;
-import project.mybookshop.repository.user.UserRepository;
 import project.mybookshop.service.ShoppingCartService;
+import project.mybookshop.service.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
 
@@ -65,8 +65,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public ShoppingCart createShoppingCartForUser(String email) {
         ShoppingCart shoppingCart = new ShoppingCart();
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new EntityNotFoundException("Can't find a user by email: " + email));
+        User user = userService.findUserByEmail(email);
         shoppingCart.setUser(user);
         return shoppingCartRepository.save(shoppingCart);
     }
