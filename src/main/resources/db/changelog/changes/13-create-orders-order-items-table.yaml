@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-orders-order-items-table
+      author: nikita ostrenskyi
+      changes:
+        - createTable:
+            tableName: orders_order_items
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_order_id
+                    references: orders(id)
+              - column:
+                  name: order_item_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_order_item_id
+                    references: order_items(id)
