@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import project.mybookshop.dto.book.BookDtoWithoutCategoryIds;
 import project.mybookshop.dto.category.CategoryDto;
@@ -29,6 +31,7 @@ public class CategoryController {
             description = "Create a new category")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
         return categoryService.save(categoryDto);
     }
@@ -62,6 +65,7 @@ public class CategoryController {
             description = "Soft delete of a category by id")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
     }

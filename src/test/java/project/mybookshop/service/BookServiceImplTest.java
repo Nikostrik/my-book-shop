@@ -138,8 +138,7 @@ class BookServiceImplTest {
 
         BookDto actual = bookService.findById(BOOK_ID);
 
-        EqualsBuilder.reflectionEquals(
-                expected, actual, "id","title","author","isbn","price");
+        EqualsBuilder.reflectionEquals(expected, actual);
 
         verify(bookRepository, times(1)).findById(anyLong());
         verifyNoMoreInteractions(bookRepository);

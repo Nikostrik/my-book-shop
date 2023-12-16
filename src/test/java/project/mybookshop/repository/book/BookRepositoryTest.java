@@ -23,7 +23,7 @@ class BookRepositoryTest {
             """)
     @Sql(scripts = {
             "classpath:database/books/add-three-books.sql",
-            "classpath:database/categories/add-one-category.sql",
+            "classpath:database/categories/add-three-categories.sql",
             "classpath:database/books_categories/add-books-to-categories.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {

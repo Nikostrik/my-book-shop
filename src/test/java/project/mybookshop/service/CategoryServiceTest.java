@@ -132,8 +132,7 @@ class CategoryServiceTest {
 
         CategoryDto actual = categoryService.getById(CATEGORY_ID);
 
-        EqualsBuilder.reflectionEquals(
-                expected, actual, "id", "name");
+        EqualsBuilder.reflectionEquals(expected, actual);
 
         verify(categoryRepository, times(1)).findById(anyLong());
         verifyNoMoreInteractions(categoryRepository);
