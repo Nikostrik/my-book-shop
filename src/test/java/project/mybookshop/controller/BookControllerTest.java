@@ -43,7 +43,12 @@ import project.mybookshop.model.Category;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
     protected static MockMvc mockMvc;
-    private static final Long BOOK_ID = 1L;
+    private static final Long TEST_ID = 1L;
+    private static final int EXPECTED_LENGTH = 3;
+    private static final String TEST_BOOK_ISBN = "1234";
+    private static final String TEST_BOOK_AUTHOR = "Test Author 2";
+    private static final String TEST_BOOK_TITLE = "Test Book 3";
+    private static final String CATEGORY_NAME = "fantasy";
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -114,10 +119,10 @@ class BookControllerTest {
     @DisplayName("Create a new book")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void createBook_ValidRequestDto_Success() throws Exception {
-        Category category = new Category().setId(1L).setName("fantasy");
+        Category category = new Category().setId(TEST_ID).setName(CATEGORY_NAME);
         CreateBookRequestDto requestDto = new CreateBookRequestDto()
                 .setTitle("Harry Potter").setAuthor("Joanne Rowling")
-                .setIsbn("4321").setPrice(new BigDecimal(10)).setCategories(Set.of(1L));
+                .setIsbn("4321").setPrice(new BigDecimal(10)).setCategories(Set.of(TEST_ID));
 
         Book expected = new Book()
                 .setTitle(requestDto.getTitle())
@@ -155,11 +160,11 @@ class BookControllerTest {
 
         BookDto[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto[].class);
-
-        Assertions.assertEquals(3, actual.length);
         List<Long> bookIds = Arrays.stream(actual)
                 .map(BookDto::getId)
                 .toList();
+
+        Assertions.assertEquals(EXPECTED_LENGTH, actual.length);
         assertThat(bookIds).containsExactlyInAnyOrder(1L, 2L, 3L);
     }
 
@@ -167,7 +172,7 @@ class BookControllerTest {
     @DisplayName("Get book by id")
     @WithMockUser(roles = "USER")
     void getById_WithValidBookId_ShouldReturnBookDto() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/books/{id}", BOOK_ID)
+        MvcResult result = mockMvc.perform(get("/api/books/{id}", TEST_ID)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -175,19 +180,20 @@ class BookControllerTest {
         BookDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto.class);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(BOOK_ID, actual.getId());
+        Assertions.assertEquals(TEST_ID, actual.getId());
     }
 
     @Test
     @DisplayName("Update book by id")
     @WithMockUser(roles = "ADMIN")
     void updateById_WithValidId_ShouldReturnUpdatedBookDto() throws Exception {
-        Category category = new Category().setId(1L).setName("fantasy");
+        Category category = new Category().setId(TEST_ID).setName(CATEGORY_NAME);
         CreateBookRequestDto requestDto = new CreateBookRequestDto()
                 .setTitle("Updated Book").setAuthor("Updated Author")
-                .setIsbn("1234").setPrice(new BigDecimal(22)).setCategories(Set.of(1L));
+                .setIsbn(TEST_BOOK_ISBN).setPrice(new BigDecimal(22))
+                .setCategories(Set.of(TEST_ID));
         Book expected = new Book()
-                .setId(BOOK_ID)
+                .setId(TEST_ID)
                 .setTitle(requestDto.getTitle())
                 .setAuthor(requestDto.getAuthor())
                 .setIsbn(requestDto.getIsbn())
@@ -224,7 +230,7 @@ class BookControllerTest {
     @WithMockUser(roles = "USER")
     void searchBooks_WithBookSearchParameterDto_ReturnBookDtos() throws Exception {
         BookSearchParametersDto params = new BookSearchParametersDto(
-                new String[]{"Test Author 2"}, new String[]{"Test Book 3"},"1234");
+                new String[]{TEST_BOOK_AUTHOR}, new String[]{TEST_BOOK_TITLE},TEST_BOOK_ISBN);
         MvcResult result = mockMvc.perform(get("/api/books/search")
                         .content(objectMapper.writeValueAsString(params))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -233,12 +239,12 @@ class BookControllerTest {
 
         BookDto[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto[].class);
-        Assertions.assertEquals(3, actual.length);
+        Assertions.assertEquals(EXPECTED_LENGTH, actual.length);
         Assertions.assertTrue(Arrays.stream(actual)
-                .anyMatch(bookDto -> bookDto.getIsbn().equals("1234")));
+                .anyMatch(bookDto -> bookDto.getIsbn().equals(TEST_BOOK_ISBN)));
         Assertions.assertTrue(Arrays.stream(actual)
-                .anyMatch(bookDto -> bookDto.getAuthor().equals("Test Author 2")));
+                .anyMatch(bookDto -> bookDto.getAuthor().equals(TEST_BOOK_AUTHOR)));
         Assertions.assertTrue(Arrays.stream(actual)
-                .anyMatch(bookDto -> bookDto.getTitle().equals("Test Book 3")));
+                .anyMatch(bookDto -> bookDto.getTitle().equals(TEST_BOOK_TITLE)));
     }
 }

@@ -115,11 +115,11 @@ class CategoryControllerTest {
 
         CategoryDto[] actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CategoryDto[].class);
-
-        Assertions.assertEquals(3, actual.length);
         List<Long> categoryIds = Arrays.stream(actual)
                 .map(CategoryDto::getId)
                 .toList();
+
+        Assertions.assertEquals(3, actual.length);
         assertThat(categoryIds).containsExactlyInAnyOrder(1L, 2L, 3L);
     }
 
