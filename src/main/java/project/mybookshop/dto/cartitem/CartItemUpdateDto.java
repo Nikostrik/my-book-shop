@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class CartItemUpdateDto {
     @Min(0)
-    private Long quantity;
+    private int quantity;
 }

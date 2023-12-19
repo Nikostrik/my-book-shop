@@ -1,11 +1,13 @@
 package project.mybookshop.dto.cartitem;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class CartItemResponseDto {
     private Long id;
     private Long bookId;
     private String bookTitle;
-    private Long quantity;
+    private int quantity;
 }
