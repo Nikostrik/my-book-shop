@@ -3,12 +3,14 @@ package project.mybookshop.dto.user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import project.mybookshop.validation.FieldMatch;
 
 @FieldMatch(field = "password",
         fieldMatch = "repeatPassword",
         message = "Password fields must match")
 @Data
+@Accessors(chain = true)
 public class UserRegistrationRequestDto {
     @NotBlank
     @Size(min = 8, max = 50)
